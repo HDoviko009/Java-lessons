@@ -5,6 +5,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -31,7 +32,7 @@ public class Login extends HttpServlet {
 
         out.println("<div class='login-box'>");
         out.println("<h2>Login</h2>");
-        out.println("<form action='Home' method='post'>");
+        out.println("<form action='login' method='post'>");
         out.println("<input type='text' placeholder='Username' name='username'>");
         out.println("<input type='password' placeholder='Password' name='password'>");
         out.println("<input type='submit' value='Login'>");
@@ -41,5 +42,22 @@ public class Login extends HttpServlet {
         out.println("</body>");
         out.println("</html>");
 
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        if (username.equals("admin") && password.equals("admin123")) {
+            HttpSession session = req.getSession();
+            session.setAttribute("username", username);
+            session.setAttribute("password", password);
+            resp.sendRedirect(req.getContextPath() + "/Home");
+        }
+        else {
+            resp.sendRedirect(req.getContextPath() + "/login");
+        }
+        System.out.println("Username : " + username);
+        System.out.println("Password : " + password);
     }
 }
